@@ -2,7 +2,7 @@
  * @Author: RainYaya
  * @Date: 2023-03-19 10:53:02
  * @LastEditors: RainYaya
- * @LastEditTime: 2023-03-19 10:54:14
+ * @LastEditTime: 2023-03-19 15:48:15
  * @Description:
  */
 /** @type {import('tailwindcss').Config} */
@@ -15,6 +15,11 @@ module.exports = {
         header: '#292841',
         body: '#1C1B29',
       },
+      screens: {
+        'mobile': {
+          max: '768px'
+        }
+      }
     },
     plugins: [
       require('@tailwindcss/line-clamp')
