@@ -1,0 +1,12 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+.slick-hero .slick-prev{
+    z-index: 10;
+    left:25px;
+}
+
+.slick-hero .slick-next{
+    z-index: 10;
+    right:25px;
+}
