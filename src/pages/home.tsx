@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Card } from '../components/card'
 
 import { Section } from '../components/section'
 import { Slider } from '../components/slider/slider'
@@ -14,13 +15,15 @@ import { Film } from '../interfaces'
  */
 export const Home = () => {
   const [trendings, setTrendings] = useState<Film[]>([])
+  const [inTheaters, setInTheaters] = useState<Film[]>([])
 
-  const fetchTrendings = () => {
+  const fetch = () => {
     const arrs: Film[] = []
 
     for (let i = 0; i < 6; i++) {
       arrs.push({
         id: i,
+        mediaType: 'movie',
         title:
           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ',
         description:
@@ -33,28 +36,42 @@ export const Home = () => {
     }
 
     setTrendings(arrs)
+    setInTheaters(arrs)
   }
 
   useEffect(() => {
-    fetchTrendings()
+    fetch()
   }, [])
 
   return (
     <div>
       {/* trendings */}
       <Section className="py-0">
-              <Slider
-                  className="slick-hero"
-                  autoplay={true}
-                  slidesToScroll={1}
-                  slidesToShow={1}
-              >
+        <Slider
+          className="slick-hero"
+          autoplay={true}
+          slidesToShow={1}
+          slidesToScroll={1}
+        >
           {trendings.map((film, i) => (
             <TrendingHero film={film} key={i}></TrendingHero>
           ))}
         </Slider>
       </Section>
       {/*  in theaters */}
+      <Section title='In Theaters'>
+        <Slider
+          autoplay={true}
+          slidesToScroll={5}
+          isMovieCard={true}
+          slidesToShow={5}
+        >
+          {inTheaters.map((film, i) => (
+            <Card title={film.title} imageSrc=''  key={i}></Card>
+          ))}
+        </Slider>
+      </Section>
+
       {/* populars */}
       {/* top rated tv */}
       {/*  to rated movies */}

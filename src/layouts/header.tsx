@@ -82,13 +82,13 @@ export const Header = () => {
   }, [location.pathname])
 
   return (
-    <div className="bg-header">
-      <Container className="flex items-center justify-between">
+    <div className="bg-header sticky top-0 z-[99]">
+      <Container className="flex items-center justify-between gap-3">
         {/* brand &menu */}
         <div className="flex items-center gap-6">
           {/* brand */}
           <h1 className="text-2xl font-semibold">
-            <Link to={'./'}>Movielia</Link>
+            <Link style={{color:"red"}} to={'./'}>Movielia</Link>
           </h1>
           {/* menu */}
           <div

@@ -14,7 +14,8 @@ import { Header } from "../layouts/header"
  */
 export const AppContrainer = () => {
     return (
-        <BrowserRouter>
+        <div className="pb-[72px]">
+            <BrowserRouter>
             {/* header */}
             <Header />
             {/* body */}
@@ -22,5 +23,7 @@ export const AppContrainer = () => {
             {/* fotter */}
             <Footer />
         </BrowserRouter>
+        </div>
+        
     )
 }

@@ -9,6 +9,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 
 code {
@@ -40,3 +42,16 @@ body{
     theme('colors.body')
   );
 }
+.overlay-film-cover{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    
+    transparent 10%,
+    theme('colors.body')
+    );
+  }

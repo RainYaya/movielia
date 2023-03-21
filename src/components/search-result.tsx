@@ -18,6 +18,7 @@ export const SearchResult = (props: Props) => {
     for (let i = 0; i < 6; i++) {
       arrs.push({
         id: i,
+        mediaType: 'tv',
         title:
           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, a quia consectetur facere culpa cum quibusdam eos, asperiores, laboriosam dolorum perferendis eveniet minus recusandae dignissimos! Quas, at nemo. Maxime, veniam.',
         description: 'description',
@@ -42,8 +43,9 @@ export const SearchResult = (props: Props) => {
             left-0
             right-0
             rounded-md
-            overflow-hidden
+            overflow-auto
             bg-header
+            max-h-[480px]
         "
     >
       {items.map((film, i) => (
@@ -75,7 +77,7 @@ export const SearchResult = (props: Props) => {
       {totalItem > 5 ? (
         <button
           onClick={() => props.goToSearchPage()}
-          className="px-3 py-1.5 bg-primary w-full mx-1 hover:text-body"
+          className="px-3 py-1.5 bg-primary w-full mx-1 hover:text-body sticky -bottom-3 shadow-lg "
         >
           More results
         </button>
