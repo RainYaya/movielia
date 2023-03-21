@@ -114,14 +114,16 @@ export const Film = (props: Props) => {
 
       <Section title="Seasons">
         <Slider slidesToScroll={2} slidesToShow={2} swipe={false}>
-          {film.seasons.map((seasons, i) => (
-            <Card
-              title={`Season ${seasons.seasonNumber}`}
-              onClick={() => navigate(`/tv/${film.id}/season/${seasons.id}`)}
-              imageSrc=""
-              key={i}
-            ></Card>
-          ))}
+          {(_) =>
+            film.seasons.map((seasons, i) => (
+              <Card
+                title={`Season ${seasons.seasonNumber}`}
+                onClick={() => navigate(`/tv/${film.id}/season/${seasons.id}`)}
+                imageSrc=""
+                key={i}
+              ></Card>
+            ))
+          }
         </Slider>
       </Section>
       {/* recommendations */}
@@ -133,9 +135,11 @@ export const Film = (props: Props) => {
           isMovieCard={true}
           slidesToShow={5}
         >
-          {recommendations.map((film, i) => (
-            <Card title={film.title} imageSrc="" key={i}></Card>
-          ))}
+          {(_) =>
+            recommendations.map((film, i) => (
+              <Card title={film.title} imageSrc="" key={i}></Card>
+            ))
+          }
         </Slider>
       </Section>
     </>

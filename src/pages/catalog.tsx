@@ -12,7 +12,7 @@ import { MediaType } from '../types'
 import { Image } from '../components/image'
 import { Section } from '../components/section'
 import { Card } from '../components/card'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 interface Props {
   type: MediaType | 'search'
@@ -20,9 +20,28 @@ interface Props {
 
 export const Catalog = (props: Props) => {
   let title = ''
-
+  
   const navigate = useNavigate()
+
   const [films, setFilm] = useState<Film[]>([])
+  const [params, _] = useSearchParams()
+
+  switch (props.type) {
+    case 'movie':
+      title = 'Movies'
+      break
+    
+    case 'tv':
+      title = 'TV'
+      break
+    
+    case 'search':
+      title = `Search results for <i>${params.get('q')}</i>`
+      break
+    
+    default:
+      break
+  }
 
   const fetch = () => {
     let arrs: any = []

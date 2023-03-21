@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface Props {
   film: Film
+  onClick: () => void
 }
 
 export const TrendingHero = (props: Props) => {
@@ -12,7 +13,7 @@ export const TrendingHero = (props: Props) => {
 
   return (
     <div
-      onClick={() => navigate(`/${props.film.mediaType}/${props.film.id}`)}
+      onClick={() => props.onClick()}
       className="h-[300px] relative flex items-center cursor-pointer"
     >
       {/* bgimage */}
