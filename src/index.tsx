@@ -8,10 +8,11 @@
 
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { AppContrainer } from './components/app-conrainer'
+import { AppContainer } from './components/app-conrainer'
+console.log(process.env.REACT_APP_TMDB_API_KEY);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-root.render(<AppContrainer />)
+root.render(<AppContainer />)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

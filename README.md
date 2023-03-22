@@ -62,3 +62,5 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 1:16:53 catalog
 
 1:23:34
+1:27:55
+1:43:24

@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { search } from '../api/tmdb-api'
 import { Film } from '../interfaces'
+import { tmdbImageSrc } from '../utils'
 import { Image } from './image'
+import { useGlobalContext } from './app-conrainer'
 
 interface Props {
   keyword: string
@@ -10,27 +13,24 @@ interface Props {
 export const SearchResult = (props: Props) => {
   const [items, setItems] = useState<Film[]>([])
 
-    const [totalItem,setTotalItem]=useState(6)
-    
-  const fetch = () => {
-    const arrs: Film[] = []
+  const [totalItem, setTotalItem] = useState(0)
 
-    for (let i = 0; i < 6; i++) {
-      arrs.push({
-        id: i,
-        mediaType: 'tv',
-        title:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, a quia consectetur facere culpa cum quibusdam eos, asperiores, laboriosam dolorum perferendis eveniet minus recusandae dignissimos! Quas, at nemo. Maxime, veniam.',
-        description: 'description',
-        coverPath: '',
-        genreIds: [1, 2, 3, 4, 5, 6],
-        posterPath: '',
-        seasons: [],
-      })
-    }
+  const searchTimeout = useRef<any>('')
 
-    setItems(arrs)
+  const globalContext = useGlobalContext()
+
+  console.log(globalContext)
+  const fetch = async () => {
+    if (!props.keyword) return
+
+    clearTimeout(searchTimeout.current)
+    searchTimeout.current = setTimeout(async () => {
+      const res = await search(props.keyword)
+      setItems(res.films)
+      setTotalItem(res.totalResults)
+    }, 120)
   }
+
   useEffect(() => {
     fetch()
   }, [props.keyword])
@@ -46,6 +46,7 @@ export const SearchResult = (props: Props) => {
             overflow-auto
             bg-header
             max-h-[480px]
+            scrollbar-thin scrollbar-thumb-primary scrollbar-track-header
         "
     >
       {items.map((film, i) => (
@@ -61,13 +62,23 @@ export const SearchResult = (props: Props) => {
                         "
         >
           {/* image */}
-          <Image src="" className="h-[72px] min-w-[102px] rounded-md"></Image>
+          <Image
+            src={tmdbImageSrc(film.posterPath)}
+            className="h-[72px] min-w-[102px] w-[102px] rounded-md"
+          ></Image>
           {/* title &&page */}
           <div className="px-3 truncate">
             <p className="text-base truncate">{film.title}</p>
             <ul className=" flex flex-wrap gap-x-1.5 text-sm opacity-[0.7]">
               {film.genreIds.map((id, i) => (
-                <li key={i}> items{i}</li>
+                <li key={i}>
+                  {
+                    globalContext.genres[film.mediaType].find(
+                      (g) => g.id === id
+                    )?.name
+                  }
+                  {i != film.genreIds.length - 1 ? ',' : ''}
+                </li>
               ))}
             </ul>
           </div>
