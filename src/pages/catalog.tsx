@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 
 import { discover, getTopRated, search } from '../api/tmdb-api'
 import { Card } from '../components/card'
@@ -11,6 +16,8 @@ import { tmdbImageSrc } from '../utils'
 interface Props {
   type: MediaType | 'search' | 'list'
 }
+
+console.log('渲染')
 
 export const Catalog = (props: Props) => {
   let title = ''
@@ -45,7 +52,15 @@ export const Catalog = (props: Props) => {
       request = (page: number) => search(params.get('q') || '', page)
       break
 
-    
+    case 'list':
+      title = listTitle as string
+
+      if (title === 'top-rated-tv') {
+        request = (page: number) => getTopRated('tv', page)
+      } else if (title === 'top-rated-movies') {
+        request = (page: number) => getTopRated('movie', page)
+      }
+      break
 
     default:
       break
@@ -65,6 +80,8 @@ export const Catalog = (props: Props) => {
   }
 
   const onWindowScroll = () => {
+    console.log(loadingRef.current)
+
     if (loadingRef.current) return
 
     if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {

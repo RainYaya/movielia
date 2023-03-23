@@ -77,7 +77,10 @@ export const getPopulars = async (
 export const getTopRated = async (
   mediaType: MediaType,
   page = 1
-): Promise<Film[]> => {
+): Promise<{
+  films: Film[]
+  totalPages: number
+}> => {
   try {
     const { data } = await axiosClient.get<
       any,
@@ -91,12 +94,18 @@ export const getTopRated = async (
       },
     })
 
-    return data.results.map((val) => formatResult(val, mediaType))
+    return {
+      films: data.results.map((val) => formatResult(val, mediaType)),
+      totalPages: data.total_pages,
+    }
   } catch (error) {
     console.error(error)
   }
 
-  return []
+  return {
+    films: [],
+    totalPages: 0,
+  }
 }
 
 export const search = async (

@@ -16,11 +16,19 @@ module.exports = {
         body: '#1C1B29',
       },
       screens: {
-        'mobile': {
-          max: '768px'
-        }
-      }
-    },    
-    plugins: [require('tailwind-scrollbar'), require('@tailwindcss/line-clamp')], 
+        mobile: {
+          max: '768px',
+        },
+      },
+      transitionProperty: {
+        margin: 'margin',
+        opacity: 'opacity',
+        transform: 'transform',
+      },
+    },
+    plugins: [
+      require('tailwind-scrollbar'),
+      require('@tailwindcss/line-clamp'),
+    ],
   },
 }

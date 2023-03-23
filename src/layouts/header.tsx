@@ -88,7 +88,9 @@ export const Header = () => {
         <div className="flex items-center gap-6">
           {/* brand */}
           <h1 className="text-2xl font-semibold">
-            <Link style={{color:"red"}} to={'./'}>Movielia</Link>
+            <Link style={{ color: 'red' }} to={'./'}>
+              Movielia
+            </Link>
           </h1>
           {/* menu */}
           <div
@@ -145,7 +147,7 @@ export const Header = () => {
 
           {/* tmp result */}
 
-          {isSearchFocus ? (
+          {isSearchFocus && keyword ? (
             <SearchResult
               keyword={keyword}
               goToSearchPage={goToSearchPage}

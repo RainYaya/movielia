@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getInTheaters, getPopulars, getTopRated, getTrendings } from '../api/tmdb-api'
+import {
+  getInTheaters,
+  getPopulars,
+  getTopRated,
+  getTrailers,
+  getTrendings,
+} from '../api/tmdb-api'
 import { Card } from '../components/card'
 
 import { Section } from '../components/section'
 import { Slider } from '../components/slider/slider'
+import { TrailerModal } from '../components/trailer-modal'
 import { TrendingHero } from '../components/trending-hero'
 import { Film } from '../interfaces'
 import { isFilm, mergeFilms, tmdbImageSrc } from '../utils'
@@ -21,19 +28,30 @@ export const Home = () => {
   const [trendings, setTrendings] = useState<Film[]>([])
   const [inTheaters, setInTheaters] = useState<Film[]>([])
   const [populars, setPopulars] = useState<Film[]>([])
-  const [topRatedTv, setTopratedTv] = useState<Film[]>([])
-  const [topRatedMovie, setTopratedMovie] = useState<Film[]>([])
+  const [topRatedTv, setTopRatedTv] = useState<Film[]>([])
+  const [topRatedMovie, setTopRatedMovie] = useState<Film[]>([])
 
+  const [trailerSrc,setTrailerSrc]=useState('')
 
+  const playTrailer = async (film: Film) => {
+    
+    console.log(film);
+    
+    const trailers = await getTrailers(film.mediaType, film.id)
+
+    setTrailerSrc(`https://www.youtube.com/embed/${trailers[0].key}?autoplay=0`)
+  }
+  
   const goToDetailPage = (film: Film) => {
     navigate(`/${film.mediaType}/${film.id}`)
   }
 
   const fetchTopRatedMovie = async () => {
-    setTopratedMovie(await getTopRated('movie'))
+    setTopRatedMovie(await (await getTopRated('movie')).films)
   }
+
   const fetchTopRatedTv = async () => {
-    setTopratedTv(await getTopRated('tv'))
+    setTopRatedTv(await (await getTopRated('tv')).films)
   }
 
   const fetchPopulars = async () => {
@@ -89,8 +107,9 @@ export const Home = () => {
 
   return (
     <div>
+      <TrailerModal src={trailerSrc} onHide={() => setTrailerSrc('')}></TrailerModal>
       {/* trendings */}
-      <Section className="py-0">
+      <Section className="py-0" hidden={trendings.length===0}>
         <Slider
           className="slick-hero"
           autoplay={true}
@@ -100,6 +119,7 @@ export const Home = () => {
           {(onSwipe) =>
             trendings.map((film, i) => (
               <TrendingHero
+                onPlayTrailer={() => playTrailer(film)}
                 onClick={() =>
                   !onSwipe ? navigate(`/${film.mediaType}/${film.id}`) : ''
                 }
@@ -111,7 +131,7 @@ export const Home = () => {
         </Slider>
       </Section>
       {/*  in theaters */}
-      <Section title="In Theaters">
+      <Section title="In Theaters" hidden={inTheaters.length===0}>
         <Slider
           autoplay={true}
           slidesToScroll={5}
@@ -121,7 +141,7 @@ export const Home = () => {
           {(_) =>
             inTheaters.map((film, i) => (
               <Card
-              onClick={()=>goToDetailPage(film)}
+                onClick={() => goToDetailPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -132,7 +152,10 @@ export const Home = () => {
       </Section>
 
       {/* populars */}
-      <Section title="Top Rated TV">
+      <Section
+        title="Top Rated TV"
+        hidden={populars.length===0}
+      >
         <Slider
           autoplay={true}
           slidesToScroll={5}
@@ -142,7 +165,7 @@ export const Home = () => {
           {(_) =>
             populars.map((film, i) => (
               <Card
-              onClick={()=>goToDetailPage(film)}
+                onClick={() => goToDetailPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -154,7 +177,7 @@ export const Home = () => {
 
       {/* top rated tv */}
 
-      <Section title="Top Rated TV">
+      <Section title="Top Rated TV" hidden={topRatedTv.length===0} onTitleClick={() => navigate(`/list/top-rated-tv`)}>
         <Slider
           autoplay={true}
           slidesToScroll={5}
@@ -164,7 +187,7 @@ export const Home = () => {
           {(_) =>
             topRatedTv.map((film, i) => (
               <Card
-              onClick={()=>goToDetailPage(film)}
+                onClick={() => goToDetailPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
@@ -174,7 +197,7 @@ export const Home = () => {
         </Slider>
       </Section>
       {/*  to rated movies */}
-      <Section title="Top Rated movies">
+      <Section title="Top Rated movies" hidden={topRatedMovie.length===0} onTitleClick={() => navigate(`/list/top-rated-movies`)}>
         <Slider
           autoplay={true}
           slidesToScroll={5}
@@ -184,7 +207,7 @@ export const Home = () => {
           {(_) =>
             topRatedMovie.map((film, i) => (
               <Card
-              onClick={()=>goToDetailPage(film)}
+                onClick={() => goToDetailPage(film)}
                 title={film.title}
                 imageSrc={tmdbImageSrc(film.posterPath)}
                 key={i}
