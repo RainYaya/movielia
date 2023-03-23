@@ -55,3 +55,10 @@ body{
     theme('colors.body')
     );
   }
+
+/* #root{
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+} */

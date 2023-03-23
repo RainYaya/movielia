@@ -6,9 +6,23 @@ export interface CustomComponentProps {
   className?: string
 }
 
+export interface Episode {
+  id: number
+  title: string
+  overview: string
+  airDate: string
+  stillPath: string
+  episodeNumber: number
+}
+
 export interface Season {
   id: number
+  filmName: string
+  name: string
   seasonNumber: number
+  posterPath: string
+  episodes: Episode[]
+  airDate: string
 }
 
 export interface Film {
@@ -25,6 +39,7 @@ export interface Cast {
   id: number
   name: string
   characterName: string
+  profilePath: string
 }
 
 export interface Trailer {
@@ -35,4 +50,3 @@ export interface Genre {
   id: number
   name: string
 }
-

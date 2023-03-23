@@ -1,73 +1,93 @@
-/*
- * @Author: RainYaya
- * @Date: 2023-03-19 15:58:44
- * @LastEditors: RainYaya
- * @LastEditTime: 2023-03-19 16:01:31
- * @Description:
- */
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
-import { useEffect, useState } from 'react'
+import { discover, getTopRated, search } from '../api/tmdb-api'
+import { Card } from '../components/card'
+import { Section } from '../components/section'
 import { Film } from '../interfaces'
 import { MediaType } from '../types'
-import { Image } from '../components/image'
-import { Section } from '../components/section'
-import { Card } from '../components/card'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { tmdbImageSrc } from '../utils'
 
 interface Props {
-  type: MediaType | 'search'
+  type: MediaType | 'search' | 'list'
 }
 
 export const Catalog = (props: Props) => {
   let title = ''
-  
-  const navigate = useNavigate()
+  let request: (page: number) => Promise<{
+    totalPages: number
+    films: Film[]
+  }>
 
-  const [films, setFilm] = useState<Film[]>([])
+  const [films, setFilms] = useState<Film[]>([])
   const [params, _] = useSearchParams()
+  const page = useRef(1)
+  const totalPage = useRef(2)
+  const loadingRef = useRef(false)
+  const [onLoading, setOnLoading] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { listTitle } = useParams<any>()
 
   switch (props.type) {
     case 'movie':
       title = 'Movies'
+      request = (page: number) => discover('movie', page)
       break
-    
+
     case 'tv':
       title = 'TV'
+      request = (page: number) => discover('tv', page)
       break
-    
+
     case 'search':
       title = `Search results for <i>${params.get('q')}</i>`
+      request = (page: number) => search(params.get('q') || '', page)
       break
+
     
+
     default:
       break
   }
 
-  const fetch = () => {
-    let arrs: any = []
+  const fetch = async () => {
+    loadingRef.current = true
+    setOnLoading(true)
 
-    for (let i = 0; i < 20; i++) {
-      arrs.push({
-        title: `Lorem ipsum dolor sit, amet consectet`,
-      })
-    }
+    const { films, totalPages } = await request(page.current)
 
-    setFilm(arrs)
+    setOnLoading(false)
+    loadingRef.current = false
+
+    totalPage.current = totalPages
+    setFilms((arrs) => [...arrs, ...films])
   }
 
-  // useEffect(() => {
-  //   setFilms([])
-  //   fetch()
-  // }, [location])
+  const onWindowScroll = () => {
+    if (loadingRef.current) return
+
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+      if (totalPage.current > page.current) {
+        page.current++
+        fetch()
+      }
+    }
+  }
 
   useEffect(() => {
-    // window.addEventListener('scroll', onWindowScroll)
-
-    // return () => {
-    //   window.removeEventListener('scroll', onWindowScroll)
-    // }
+    setFilms([])
     fetch()
+  }, [location])
+
+  useEffect(() => {
+    window.addEventListener('scroll', onWindowScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onWindowScroll)
+    }
   }, [])
+
   return (
     <>
       {/* background */}
@@ -87,7 +107,7 @@ export const Catalog = (props: Props) => {
             <div key={i}>
               <Card
                 onClick={() => navigate(`/${film.mediaType}/${film.id}`)}
-                imageSrc=""
+                imageSrc={tmdbImageSrc(film.posterPath)}
                 title={film.title}
                 key={i}
               ></Card>

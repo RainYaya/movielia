@@ -3,6 +3,7 @@ import { Container } from './container'
 
 interface Props extends CustomComponentProps {
   title?: string
+  hidden?:boolean
 }
 
 export const Section = (props: Props) => {

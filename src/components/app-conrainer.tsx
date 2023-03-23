@@ -70,14 +70,12 @@ export const AppContainer = () => {
           genres,
         }}
       >
-        <div className="pb-[72px]">
-          {/* header */}
-          <Header />
-          {/* body */}
-          <Body />
-          {/* fotter */}
-          <Footer />
-        </div>
+        {/* header */}
+        <Header />
+        {/* body */}
+        <Body />
+        {/* fotter */}
+        <Footer />
       </GlobalContext.Provider>
     </BrowserRouter>
   )

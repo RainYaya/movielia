@@ -5,15 +5,18 @@ interface Props extends CustomComponentProps {
   src: string
 }
 
-
-export const Image = ({ className = 'h-full', src = '', }: Props) => {
-  
+export const Image = (props: Props) => {
   return (
     <div
-      className={mergeClassName('bg-primary w-full  overflow-hidden', className)}
+      className={mergeClassName(
+        'bg-primary rounded-lg overflow-hidden',
+        props.className
+      )}
     >
-      
-      <img src={src} className="w-full h-full object-cover"></img>
+      <img
+        src={props.src}
+        className="min-h-[200px] w-full h-full object-cover"
+      ></img>
     </div>
   )
 }

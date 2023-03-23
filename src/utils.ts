@@ -21,7 +21,19 @@ export const formatResult = (obj: any, mediaType?: MediaType): Film => {
     posterPath: obj.poster_path,
     genreIds: obj.genre_ids || obj.genres?.map((g: any) => g.id) || [],
     mediaType: mediaType || obj.media_type,
-    seasons: obj.seasons ?? [],
+    seasons:
+      obj.seasons?.map(
+        (season: any) =>
+          ({
+            id: season.id,
+            filmName: obj.title,
+            name: season.name,
+            posterPath: season.poster_path,
+            seasonNumber: season.season_number,
+            airDate: season.air_date,
+            episodes: [],
+          } satisfies Season)
+      ) || [],
   }
 }
 

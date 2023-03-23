@@ -1,26 +1,25 @@
-import { useNavigate } from 'react-router-dom'
-import { Film } from '../interfaces'
+import { CustomComponentProps } from '../interfaces'
+import { mergeClassName } from '../utils'
 import { Image } from './image'
 
-interface Props {
+interface Props extends CustomComponentProps {
   imageSrc: string
-  title: string
+  title?: string
   onClick?: Function
 }
 
 export const Card = (props: Props) => {
-  const navigate = useNavigate()
-
   return (
     <div
       onClick={() => (props.onClick ? props.onClick() : '')}
-      className="mx-3 my-1.5 cursor-pointer"
+      className={mergeClassName(" group mx-3 my-1.5 cursor-pointer",props.className)}
     >
       <Image
         src={props.imageSrc}
         className="min-h-[200px] h-[250px] rounded-lg overflow-hidden"
       ></Image>
       <p className="py-1.5 line-clamp-2">{props.title}</p>
+      {props.children}
     </div>
   )
 }
